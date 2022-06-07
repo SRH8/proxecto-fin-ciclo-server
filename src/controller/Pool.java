@@ -23,7 +23,7 @@ public class Pool {
      * 
      * @throws SQLException
      */
-    public static Connection LaunchPool() throws SQLException {
+    public static Connection launchPool() throws SQLException {
         try {
         	ResourceBundle rb = ResourceBundle.getBundle("preferences.db");
         	
