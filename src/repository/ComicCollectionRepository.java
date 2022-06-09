@@ -1,12 +1,10 @@
 package repository;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import com.mysql.jdbc.PreparedStatement;
-
 import controller.Pool;
 import model.entities.ComicCollection;
 
@@ -24,7 +22,7 @@ public class ComicCollectionRepository {
 			
 			String query = "SELECT * FROM colecciones";
 			
-			PreparedStatement preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			
 			ResultSet resultSet = preparedStatement.executeQuery();
 			

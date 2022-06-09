@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JOptionPane;
+
 import controller.Pool;
 import model.entities.ComicCollection;
 import repository.ComicCollectionRepository;
@@ -48,31 +50,36 @@ public class ServerThread extends Thread{
 			
 			while(true) {
 				 Socket clientSocket = skServidor.accept();
+				 
 	             System.out.println("Cliente conectado");
 	             
 	             Thread responseToClient = new Thread(new Runnable() {	
 					@Override
 					public void run() {
 						try {
+							System.out.println("antes del null check");
 							if(clientSocket != null) {
 								DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
 								DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
 								
 								String command = inputStream.readUTF();
-								
+								System.out.println("llega antes de switch");
+								System.out.println("COMANDO QUE LLEGA AL SERVER " + command.toLowerCase().trim());
 								switch(command.toLowerCase().trim()) {
-									case "listarColeccion":
+									case "listarcoleccion":
 										outputStream.writeUTF("listarColeccionOK");
 										ArrayList<ComicCollection> collectionList = comicCollectionRepository.list();
 										ObjectOutputStream objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
-										
+										System.out.println("llega antes de devolver lista");
 										objectOutputStream.writeObject(collectionList);
+										System.out.println("llega despues de devolver lista");
 										objectOutputStream.flush();
 									break;
-								
+									default:
 								}
+								outputStream.flush();
 							} else {
-								
+								JOptionPane.showMessageDialog(null, "Cliente no conectado", "Servidor", JOptionPane.ERROR_MESSAGE);
 							}
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -80,6 +87,7 @@ public class ServerThread extends Thread{
 						
 					}
 				});
+	            responseToClient.start();
 			}
 			
 		} catch (SQLException e) {

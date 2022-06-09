@@ -30,7 +30,7 @@ public class Pool {
             basicdatasource.setDriverClassName("org.mariadb.jdbc.Driver");
             basicdatasource.setUsername(rb.getString("user"));
             basicdatasource.setPassword(rb.getString("password"));
-            basicdatasource.setUrl("jdbc:mariadb://" + rb.getString("ip") + rb.getString("port") + rb.getString("db"));
+            basicdatasource.setUrl("jdbc:mariadb://" + rb.getString("ip") + ":"+ rb.getString("port") + rb.getString("db"));
             basicdatasource.setValidationQuery("Select 1");
             basicdatasource.setMaxTotal(1);
             basicdatasource.setMinIdle(50);
