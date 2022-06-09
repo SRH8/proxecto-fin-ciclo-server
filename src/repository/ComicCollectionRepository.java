@@ -27,7 +27,7 @@ public class ComicCollectionRepository {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			
 			while (resultSet.next()) {
-				collectionList.add(new ComicCollection(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getBytes(4)));
+				collectionList.add(new ComicCollection(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getBytes(4), resultSet.getString(5)));
 			}
 			
 			resultSet.close();
