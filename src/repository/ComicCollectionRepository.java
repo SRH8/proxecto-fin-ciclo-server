@@ -47,11 +47,18 @@ public class ComicCollectionRepository {
 		int insertResult = 0;
 		
 		try (Connection connection = Pool.getConection();) {
+			String command = "INSERT INTO colecciones VALUES(?,?,?,?)";
+			PreparedStatement preparedStatement = connection.prepareStatement(command);
+			preparedStatement.setString(1, comicCollection.getName());
+			preparedStatement.setString(2, comicCollection.getDescription());
+			preparedStatement.setBytes(3, comicCollection.getImage());
+			preparedStatement.setString(4, comicCollection.getReleaseYear());
+			
+			insertResult = preparedStatement.executeUpdate();
 			
 		} catch (Exception e) {
 			
-		}
-		
+		}		
 		return insertResult;
 	}
 	

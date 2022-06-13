@@ -46,6 +46,7 @@ public class ComicCollection implements Serializable{
 	 * @param name nombre de la colección
 	 * @param description descripción de la colección
 	 * @param image imagen de la colección
+	 * @param releaseYear año de salida de la colección
 	 */
 	public ComicCollection(int id, String name, String description, byte[] image, String releaseYear) {
 		this.id = id;

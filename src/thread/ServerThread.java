@@ -3,6 +3,7 @@ package thread;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -34,7 +35,6 @@ public class ServerThread extends Thread{
 
             outputStream.writeUTF("Se ha conectado el cliente de forma correcta");
 
-
         } catch (IOException ex) {
             Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -59,26 +59,30 @@ public class ServerThread extends Thread{
 						try {
 							System.out.println("antes del null check");
 							if(clientSocket != null) {
-								DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
+								ObjectInputStream objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
 								DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
 								
-								String command = inputStream.readUTF();
-								System.out.println("llega antes de switch");
-								System.out.println("COMANDO QUE LLEGA AL SERVER " + command.toLowerCase().trim());
-								switch(command.toLowerCase().trim()) {
+								Object[] command = (Object[]) objectInputStream.readObject();
+								switch(command[0].toString().toLowerCase().trim()) {
 									case "listarcoleccion":
 										outputStream.writeUTF("listarColeccionOK");
 										ArrayList<ComicCollection> collectionList = comicCollectionRepository.list();
-										ObjectOutputStream objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
-										objectOutputStream.writeObject(collectionList);
-										objectOutputStream.flush();
-										objectOutputStream.close();
+										ObjectOutputStream objectOStream = new ObjectOutputStream(clientSocket.getOutputStream());
+										objectOStream.writeObject(collectionList);
+										objectOStream.flush();
+										objectOStream.close();
 										break;
 									case "insertarColeccion":
 										outputStream.writeUTF("insertarColeccionOK");
-										
+										ComicCollection comicCollection = (ComicCollection) objectInputStream.readObject();
+										int rowNumber = comicCollectionRepository.insertCollection(comicCollection);
+										objectOStream = new ObjectOutputStream(clientSocket.getOutputStream());
+										objectOStream.writeInt(rowNumber);
+										objectOStream.flush();
+										objectOStream.close();
 										break;
 									default:
+										System.out.println("ha llegado al default server");
 								}
 								outputStream.flush();
 							} else {
@@ -86,8 +90,9 @@ public class ServerThread extends Thread{
 							}
 						} catch (IOException e) {
 							e.printStackTrace();
-						}
-						
+						} catch (ClassNotFoundException e1) {
+							e1.printStackTrace();
+						}			
 					}
 				});
 	            responseToClient.start();
