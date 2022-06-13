@@ -70,11 +70,14 @@ public class ServerThread extends Thread{
 										outputStream.writeUTF("listarColeccionOK");
 										ArrayList<ComicCollection> collectionList = comicCollectionRepository.list();
 										ObjectOutputStream objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
-										System.out.println("llega antes de devolver lista");
 										objectOutputStream.writeObject(collectionList);
-										System.out.println("llega despues de devolver lista");
 										objectOutputStream.flush();
-									break;
+										objectOutputStream.close();
+										break;
+									case "insertarColeccion":
+										outputStream.writeUTF("insertarColeccionOK");
+										
+										break;
 									default:
 								}
 								outputStream.flush();

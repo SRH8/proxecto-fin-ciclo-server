@@ -15,6 +15,10 @@ import model.entities.ComicCollection;
  */
 public class ComicCollectionRepository {
 
+	/**
+	 * Obtiene las colecciones de cómics de la base de datos
+	 * @return
+	 */
 	public ArrayList<ComicCollection> list() {
 		ArrayList<ComicCollection> collectionList = new ArrayList<>();
 		
@@ -38,4 +42,17 @@ public class ComicCollectionRepository {
 		
 		return collectionList;
 	}
+	
+	public int insertCollection(ComicCollection comicCollection) {
+		int insertResult = 0;
+		
+		try (Connection connection = Pool.getConection();) {
+			
+		} catch (Exception e) {
+			
+		}
+		
+		return insertResult;
+	}
+	
 }
