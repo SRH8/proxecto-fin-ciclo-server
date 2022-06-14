@@ -47,7 +47,7 @@ public class ComicCollectionRepository {
 		int insertResult = 0;
 		
 		try (Connection connection = Pool.getConection();) {
-			String command = "INSERT INTO colecciones VALUES(?,?,?,?)";
+			String command = "INSERT INTO colecciones(nombre, descripcion, imagen, anho_estreno) VALUES(?,?,?,?)";
 			PreparedStatement preparedStatement = connection.prepareStatement(command);
 			preparedStatement.setString(1, comicCollection.getName());
 			preparedStatement.setString(2, comicCollection.getDescription());
@@ -56,8 +56,11 @@ public class ComicCollectionRepository {
 			
 			insertResult = preparedStatement.executeUpdate();
 			
-		} catch (Exception e) {
+			connection.commit();
 			
+		} catch (Exception e) {
+			System.out.println("Error al insertar colección");
+			e.printStackTrace();
 		}		
 		return insertResult;
 	}

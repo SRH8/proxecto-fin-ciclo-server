@@ -10,6 +10,11 @@ import java.io.Serializable;
 public class ComicCollection implements Serializable{
 	
 	/**
+	 * Identificador único de la clase
+	 */
+	private static final long serialVersionUID = 6529685098267757690L;
+	
+	/**
 	 * Identificador de la colección
 	 */
 	private int id;

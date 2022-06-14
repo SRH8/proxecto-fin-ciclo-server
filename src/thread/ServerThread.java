@@ -72,10 +72,12 @@ public class ServerThread extends Thread{
 										objectOStream.flush();
 										objectOStream.close();
 										break;
-									case "insertarColeccion":
+									case "insertarcoleccion":
 										outputStream.writeUTF("insertarColeccionOK");
-										ComicCollection comicCollection = (ComicCollection) objectInputStream.readObject();
+										ComicCollection comicCollection = (ComicCollection) command[1];
+										System.out.println("EN EL SERVER ANTES DE INSERTAR" + comicCollection.getName());
 										int rowNumber = comicCollectionRepository.insertCollection(comicCollection);
+										System.out.println("NUMERO DE FILAS EN EL SERVER" + rowNumber);
 										objectOStream = new ObjectOutputStream(clientSocket.getOutputStream());
 										objectOStream.writeInt(rowNumber);
 										objectOStream.flush();
