@@ -92,6 +92,15 @@ public class ServerThread extends Thread{
 										objectOStream.flush();
 										objectOStream.close();
 										break;
+									case "editarcoleccion":
+										outputStream.writeUTF("editarColeccionOK");
+										ComicCollection comicCollectionEdit = (ComicCollection) command[1];
+										int rowNumberEdit = comicCollectionRepository.editCollection(comicCollectionEdit);
+										objectOStream = new ObjectOutputStream(clientSocket.getOutputStream());
+										objectOStream.writeInt(rowNumberEdit);
+										objectOStream.flush();
+										objectOStream.close();
+										break;
 									default:
 										System.out.println("ha llegado al default server");
 								}

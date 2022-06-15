@@ -17,7 +17,8 @@ public class ComicCollectionRepository {
 
 	/**
 	 * Obtiene las colecciones de cómics de la base de datos
-	 * @return
+	 * 
+	 * @return lista de colecciones
 	 */
 	public ArrayList<ComicCollection> list() {
 		ArrayList<ComicCollection> collectionList = new ArrayList<>();
@@ -43,6 +44,12 @@ public class ComicCollectionRepository {
 		return collectionList;
 	}
 	
+	/**
+	 * Inserta una colección en la base de datos
+	 * 
+	 * @param comicCollection colección
+	 * @return resultado de la operación
+	 */
 	public int insertCollection(ComicCollection comicCollection) {
 		int insertResult = 0;
 		
@@ -65,6 +72,12 @@ public class ComicCollectionRepository {
 		return insertResult;
 	}
 
+	/**
+	 * Elimina una colección de la base de datos
+	 * 
+	 * @param comicCollection colección
+	 * @return resultado de la operación
+	 */
 	public int deleteCollection(ComicCollection comicCollection) {
 		int deleteResult = 0;
 		
@@ -82,6 +95,35 @@ public class ComicCollectionRepository {
 			e.printStackTrace();
 		}		
 		return deleteResult;
+	}
+
+	/**
+	 * Modifica una colección de la base de datos
+	 * 
+	 * @param comicCollection colección
+	 * @return resultado de la operación
+	 */
+	public int editCollection(ComicCollection comicCollection) {
+		int updateResult = 0;
+		
+		try (Connection connection = Pool.getConection();) {
+			String command = "UPDATE colecciones SET nombre = ?, descripcion = ?, imagen = ? WHERE id = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(command);
+			preparedStatement.setString(1, comicCollection.getName());
+			preparedStatement.setString(2, comicCollection.getDescription());
+			preparedStatement.setBytes(3, comicCollection.getImage());
+			preparedStatement.setInt(4, comicCollection.getId());
+			
+			updateResult = preparedStatement.executeUpdate();
+			
+			connection.commit();
+			
+		} catch (Exception e) {
+			System.out.println("Error al actualizar colección");
+			e.printStackTrace();
+		}		
+		
+		return updateResult;
 	}
 	
 }
