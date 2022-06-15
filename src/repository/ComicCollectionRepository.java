@@ -64,5 +64,24 @@ public class ComicCollectionRepository {
 		}		
 		return insertResult;
 	}
+
+	public int deleteCollection(ComicCollection comicCollection) {
+		int deleteResult = 0;
+		
+		try (Connection connection = Pool.getConection();) {
+			String command = "DELETE FROM colecciones WHERE id = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(command);
+			preparedStatement.setInt(1, comicCollection.getId());
+			
+			deleteResult = preparedStatement.executeUpdate();
+			
+			connection.commit();
+			
+		} catch (Exception e) {
+			System.out.println("Error al eliminar colección");
+			e.printStackTrace();
+		}		
+		return deleteResult;
+	}
 	
 }
