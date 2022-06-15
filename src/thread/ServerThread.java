@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 
 import controller.Pool;
 import model.entities.ComicCollection;
+import net.sf.jasperreports.engine.JRResultSetDataSource;
 import repository.ComicCollectionRepository;
 
 /**
@@ -75,9 +76,7 @@ public class ServerThread extends Thread{
 									case "insertarcoleccion":
 										outputStream.writeUTF("insertarColeccionOK");
 										ComicCollection comicCollection = (ComicCollection) command[1];
-										System.out.println("EN EL SERVER ANTES DE INSERTAR" + comicCollection.getName());
 										int rowNumber = comicCollectionRepository.insertCollection(comicCollection);
-										System.out.println("NUMERO DE FILAS EN EL SERVER" + rowNumber);
 										objectOStream = new ObjectOutputStream(clientSocket.getOutputStream());
 										objectOStream.writeInt(rowNumber);
 										objectOStream.flush();
@@ -98,6 +97,14 @@ public class ServerThread extends Thread{
 										int rowNumberEdit = comicCollectionRepository.editCollection(comicCollectionEdit);
 										objectOStream = new ObjectOutputStream(clientSocket.getOutputStream());
 										objectOStream.writeInt(rowNumberEdit);
+										objectOStream.flush();
+										objectOStream.close();
+										break;
+									case "informecolecciones":
+										outputStream.writeUTF("informeColeccionesOK");
+										JRResultSetDataSource ds = comicCollectionRepository.showCollectionReport();
+										objectOStream = new ObjectOutputStream(clientSocket.getOutputStream());
+										objectOStream.writeObject(ds);
 										objectOStream.flush();
 										objectOStream.close();
 										break;
