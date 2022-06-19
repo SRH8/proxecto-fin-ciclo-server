@@ -341,4 +341,50 @@ public class ComicRepository {
 		
 		return comicStatus;
 	}
+
+	/**
+	 * Edita un cómic
+	 * 
+	 * @param comicEdit comic a editar
+	 * @param descripcionEdit descripción del cómic
+	 * @param tapaEdit tipo de tapa
+	 * @param imagenEdit imagen de portada
+	 * @param estadoEdit estado del cómic
+	 * @return resultado de la operación
+	 */
+	public int edit(Comic comicEdit, String descripcionEdit, String tapaEdit, byte[] imagenEdit, String estadoEdit) {
+		int resultEdit = 0;
+		CoverType coverTypeEdit = null;
+		
+		String command = "UPDATE comics SET descripcion = ?, tapa = ?, portada = ?, id_estado = ? WHERE id =?";
+		
+		try(Connection connection = Pool.getConection()) {
+			ComicStatus comicStatus = getComicStatusByName(connection, estadoEdit);
+			
+			switch(tapaEdit.toLowerCase().trim()) {
+			case "dura":
+				coverTypeEdit = CoverType.DURA;
+				break;
+			case "blanda":
+				coverTypeEdit = CoverType.BLANDA;
+				break;					
+			}
+			
+			PreparedStatement preparedStatement = connection.prepareStatement(command);
+			preparedStatement.setString(1, descripcionEdit);
+			preparedStatement.setString(2, coverTypeEdit.toString());
+			preparedStatement.setBytes(3, imagenEdit);
+			preparedStatement.setInt(4, comicStatus.getId());
+			preparedStatement.setInt(5, comicEdit.getId());
+			
+			resultEdit = preparedStatement.executeUpdate();
+			
+			connection.commit();
+			
+		} catch (SQLException e) {
+			System.out.println("Error al editar cómic");
+			e.printStackTrace();
+		}
+		return resultEdit;
+	}
 }

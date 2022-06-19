@@ -167,6 +167,20 @@ public class ServerThread extends Thread{
 										objectOStream.flush();
 										objectOStream.close();			
 										break;
+									case "editarcomic":
+										outputStream.writeUTF("editarComicOK");
+										Comic comicEdit = (Comic) command[1];
+										String descripcionEdit  =  (String) command[2];
+										String tapaEdit =  (String) command[3];
+										byte[] imagenEdit = (byte[]) command[4];
+										String estadoEdit =  (String) command[5];
+										int resultEditComic = comicRepository.edit(comicEdit, descripcionEdit, tapaEdit, imagenEdit, estadoEdit);
+										objectOStream = new ObjectOutputStream(clientSocket.getOutputStream());
+										objectOStream.writeInt(resultEditComic);
+										objectOStream.flush();
+										objectOStream.close();			
+										
+										break;
 									default:
 										System.out.println("Error al leer la acción a realizar");
 								}
