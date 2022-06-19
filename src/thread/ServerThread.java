@@ -15,9 +15,11 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 import controller.Pool;
+import model.entities.Comic;
 import model.entities.ComicCollection;
 import net.sf.jasperreports.engine.JRResultSetDataSource;
 import repository.ComicCollectionRepository;
+import repository.ComicRepository;
 
 /**
  * Hilo del servidor
@@ -44,7 +46,8 @@ public class ServerThread extends Thread{
 	
 	public static void main(String[] args) {
 		ComicCollectionRepository comicCollectionRepository = new ComicCollectionRepository();
-
+		ComicRepository comicRepository = new ComicRepository();
+		
 		try (ServerSocket skServidor = new ServerSocket(port)) {
 			Pool.launchPool();
 			System.out.println("Escuchando en el puerto " + port);
@@ -108,8 +111,16 @@ public class ServerThread extends Thread{
 										objectOStream.flush();
 										objectOStream.close();
 										break;
+									case "listarcomics":
+										outputStream.writeUTF("listarComicsOK");
+										ArrayList<Comic> comicList = comicRepository.list();
+										objectOStream = new ObjectOutputStream(clientSocket.getOutputStream());
+										objectOStream.writeObject(comicList);
+										objectOStream.flush();
+										objectOStream.close();
+										break;
 									default:
-										System.out.println("ha llegado al default server");
+										System.out.println("Error al leer la acción a realizar");
 								}
 								outputStream.flush();
 							} else {
