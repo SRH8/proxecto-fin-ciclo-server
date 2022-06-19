@@ -143,6 +143,18 @@ public class ServerThread extends Thread{
 										objectOStream.flush();
 										objectOStream.close();								
 										break;
+									case "buscarcomicpornombre":
+										outputStream.writeUTF("buscarComicPorNombreOK");
+										String comicName = (String) command[1];
+										
+										ArrayList<Comic> comicListSearchByName = comicRepository.searchComicByName(comicName);
+										objectOStream = new ObjectOutputStream(clientSocket.getOutputStream());
+										objectOStream.writeObject(comicListSearchByName);
+										objectOStream.flush();
+										objectOStream.close();
+										break;
+									case "buscarcomicsporcoleccion":
+										break;
 									default:
 										System.out.println("Error al leer la acción a realizar");
 								}

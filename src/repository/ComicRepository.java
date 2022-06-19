@@ -58,7 +58,7 @@ public class ComicRepository {
 			
 			resultSet.close();
 		} catch (SQLException e) {
-			System.out.println("Error al listar colleciones");
+			System.out.println("Error al listar cómics");
 			e.printStackTrace();
 		}
 		
@@ -133,10 +133,59 @@ public class ComicRepository {
 			connection.commit();
 			
 		} catch (Exception e) {
-			System.out.println("Error al eliminar colección");
+			System.out.println("Error al eliminar cómic");
 			e.printStackTrace();
 		}		
 		return deleteResult;
 		
 	}
+	
+	/**
+	 * Busca un cómic por su nombre
+	 * 
+	 * @param name nombre del cómic
+	 * @return lista de cómics
+	 */
+	public ArrayList<Comic> searchComicByName(String name) {
+		ArrayList<Comic> comicList = new ArrayList<>();
+		
+		try (Connection connection = Pool.getConection();) {
+			
+			String query = "SELECT * FROM comics WHERE titulo = ?";
+			
+			CoverType coverType = null;
+			
+			ComicCollection comicCollection = null;
+			
+			ComicStatus comicStatus = null;
+			
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1, name);
+			
+			ResultSet resultSet = preparedStatement.executeQuery();
+			
+			while (resultSet.next()) {
+				comicCollection = getComicCollection(resultSet.getInt(7), connection);
+				comicStatus = getComicStatus(resultSet.getInt(8), connection);
+				switch(resultSet.getString(5)) {
+				case "dura":
+					coverType = CoverType.DURA;
+					break;
+				case "blanda":
+					coverType = CoverType.BLANDA;
+					break;
+					
+				}
+				comicList.add(new Comic(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), coverType, resultSet.getBytes(6), comicCollection, comicStatus));
+			}
+			
+			resultSet.close();
+		} catch (SQLException e) {
+			System.out.println("Error al buscar cómic");
+			e.printStackTrace();
+		}
+		
+		return comicList;
+	}
+	
 }
