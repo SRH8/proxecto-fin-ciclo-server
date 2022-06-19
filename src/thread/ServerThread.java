@@ -131,18 +131,6 @@ public class ServerThread extends Thread{
 										objectOStream.flush();
 										objectOStream.close();										
 										break;
-									case "cargardatospantallacomic":
-										outputStream.writeUTF("cargarDatosPantallaComicOK");
-										ArrayList<ComicCollection> collectionListComicWindow = comicCollectionRepository.list();
-										ArrayList<ComicStatus> comicStatusListComicWindow = comicStatusRepository.list();
-										
-										Object[] response = {collectionListComicWindow, comicStatusListComicWindow};
-										
-										objectOStream = new ObjectOutputStream(clientSocket.getOutputStream());
-										objectOStream.writeObject(response);
-										objectOStream.flush();
-										objectOStream.close();								
-										break;
 									case "buscarcomicpornombre":
 										outputStream.writeUTF("buscarComicPorNombreOK");
 										String comicName = (String) command[1];
@@ -154,6 +142,30 @@ public class ServerThread extends Thread{
 										objectOStream.close();
 										break;
 									case "buscarcomicsporcoleccion":
+										outputStream.writeUTF("buscarComicsPorColeccionOK");
+										String collectionName = (String) command[1];
+										
+										ArrayList<Comic> comicListSearchByCollection = comicRepository.searchComicByCollection(collectionName);
+										
+										objectOStream = new ObjectOutputStream(clientSocket.getOutputStream());
+										objectOStream.writeObject(comicListSearchByCollection);
+										objectOStream.flush();
+										objectOStream.close();
+										break;
+									case "insertarcomic":
+										outputStream.writeUTF("insertarComicOK");
+										String titulo = (String) command[1];
+										String descripcion =  (String) command[2];
+										String releaseDate =  (String) command[3];
+										String tapa =  (String) command[4];
+										byte[] imagen = (byte[]) command[5];
+										String coleccion = (String) command[6];
+										String estado =  (String) command[7];
+										int resultInsertComic = comicRepository.insert(titulo, descripcion, releaseDate, tapa, imagen, coleccion, estado);
+										objectOStream = new ObjectOutputStream(clientSocket.getOutputStream());
+										objectOStream.writeInt(resultInsertComic);
+										objectOStream.flush();
+										objectOStream.close();			
 										break;
 									default:
 										System.out.println("Error al leer la acción a realizar");
