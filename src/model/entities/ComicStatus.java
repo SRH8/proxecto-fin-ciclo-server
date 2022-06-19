@@ -39,6 +39,16 @@ public class ComicStatus implements Serializable{
 		this.id = id;
 		this.description = description;
 	}
+	
+	
+	/**
+	 * Constructor para crear un objeto estado con descripción
+	 * 
+	 * @param description descripción del estado
+	 */
+	public ComicStatus(String description) {
+		this.description = description;
+	}
 
 	/**
 	 * Obtiene el id del estado

@@ -17,9 +17,11 @@ import javax.swing.JOptionPane;
 import controller.Pool;
 import model.entities.Comic;
 import model.entities.ComicCollection;
+import model.entities.ComicStatus;
 import net.sf.jasperreports.engine.JRResultSetDataSource;
 import repository.ComicCollectionRepository;
 import repository.ComicRepository;
+import repository.ComicStatusRepository;
 
 /**
  * Hilo del servidor
@@ -47,6 +49,7 @@ public class ServerThread extends Thread{
 	public static void main(String[] args) {
 		ComicCollectionRepository comicCollectionRepository = new ComicCollectionRepository();
 		ComicRepository comicRepository = new ComicRepository();
+		ComicStatusRepository comicStatusRepository = new ComicStatusRepository();
 		
 		try (ServerSocket skServidor = new ServerSocket(port)) {
 			Pool.launchPool();
@@ -127,6 +130,18 @@ public class ServerThread extends Thread{
 										objectOStream.writeInt(rowNumberDelComic);
 										objectOStream.flush();
 										objectOStream.close();										
+										break;
+									case "cargardatospantallacomic":
+										outputStream.writeUTF("cargarDatosPantallaComicOK");
+										ArrayList<ComicCollection> collectionListComicWindow = comicCollectionRepository.list();
+										ArrayList<ComicStatus> comicStatusListComicWindow = comicStatusRepository.list();
+										
+										Object[] response = {collectionListComicWindow, comicStatusListComicWindow};
+										
+										objectOStream = new ObjectOutputStream(clientSocket.getOutputStream());
+										objectOStream.writeObject(response);
+										objectOStream.flush();
+										objectOStream.close();								
 										break;
 									default:
 										System.out.println("Error al leer la acción a realizar");
