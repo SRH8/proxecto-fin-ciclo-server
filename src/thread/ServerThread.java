@@ -119,6 +119,15 @@ public class ServerThread extends Thread{
 										objectOStream.flush();
 										objectOStream.close();
 										break;
+									case "eliminarcomic":
+										outputStream.writeUTF("eliminarComicOK");
+										Comic comic = (Comic)command[1];
+										int rowNumberDelComic = comicRepository.deleteComic(comic);
+										objectOStream = new ObjectOutputStream(clientSocket.getOutputStream());
+										objectOStream.writeInt(rowNumberDelComic);
+										objectOStream.flush();
+										objectOStream.close();										
+										break;
 									default:
 										System.out.println("Error al leer la acción a realizar");
 								}

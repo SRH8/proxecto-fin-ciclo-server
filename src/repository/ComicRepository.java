@@ -113,4 +113,30 @@ public class ComicRepository {
 		
 		return comicStatus;
 	}
+	
+	/**
+	 * Elimina un cómic de la base de datos
+	 * 
+	 * @param comic comic
+	 * @return resultado de la operación
+	 */
+	public int deleteComic(Comic comic) {
+		int deleteResult = 0;
+		
+		try (Connection connection = Pool.getConection();) {
+			String command = "DELETE FROM comics WHERE id = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(command);
+			preparedStatement.setInt(1, comic.getId());
+			
+			deleteResult = preparedStatement.executeUpdate();
+			
+			connection.commit();
+			
+		} catch (Exception e) {
+			System.out.println("Error al eliminar colección");
+			e.printStackTrace();
+		}		
+		return deleteResult;
+		
+	}
 }
