@@ -129,27 +129,4 @@ public class ComicCollectionRepository {
 		
 		return updateResult;
 	}
-	
-	public JRResultSetDataSource showCollectionReport() {	
-			JRResultSetDataSource ds = null;
-			try (Connection connection = Pool.getConection();) {
-				
-				String query = "SELECT * FROM colecciones";
-				
-				PreparedStatement preparedStatement = connection.prepareStatement(query);
-				
-				ResultSet resultSet = preparedStatement.executeQuery();
-				
-				ds = new JRResultSetDataSource(resultSet);
-				
-			
-				
-				resultSet.close();
-			} catch (SQLException e) {
-				System.out.println("Error al listar colleciones");
-				e.printStackTrace();
-			}
-			
-			return ds;
-	} 
 }

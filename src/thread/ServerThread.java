@@ -106,14 +106,6 @@ public class ServerThread extends Thread{
 										objectOStream.flush();
 										objectOStream.close();
 										break;
-									case "informecolecciones":
-										outputStream.writeUTF("informeColeccionesOK");
-										JRResultSetDataSource ds = comicCollectionRepository.showCollectionReport();
-										objectOStream = new ObjectOutputStream(clientSocket.getOutputStream());
-										objectOStream.writeObject(ds);
-										objectOStream.flush();
-										objectOStream.close();
-										break;
 									case "listarcomics":
 										outputStream.writeUTF("listarComicsOK");
 										ArrayList<Comic> comicList = comicRepository.list();
