@@ -18,7 +18,6 @@ import controller.Pool;
 import model.entities.Comic;
 import model.entities.ComicCollection;
 import model.entities.ComicStatus;
-import net.sf.jasperreports.engine.JRResultSetDataSource;
 import repository.ComicCollectionRepository;
 import repository.ComicRepository;
 import repository.ComicStatusRepository;
@@ -57,14 +56,12 @@ public class ServerThread extends Thread{
 			
 			while(true) {
 				 Socket clientSocket = skServidor.accept();
-				 
-	             System.out.println("Cliente conectado");
 	             
 	             Thread responseToClient = new Thread(new Runnable() {	
 					@Override
 					public void run() {
 						try {
-							System.out.println("antes del null check");
+				
 							if(clientSocket != null) {
 								ObjectInputStream objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
 								DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());

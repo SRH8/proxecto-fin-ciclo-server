@@ -7,10 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import controller.Pool;
 import model.entities.ComicCollection;
-import net.sf.jasperreports.engine.JRResultSetDataSource;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
 
 /**
  * Operaciones contra la base de datos para las colecciones de cómics
